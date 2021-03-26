@@ -54,6 +54,30 @@ if (sizeof($_POST) > 0) {
         }
     }
 
+    // Check episode and season numbers
+    if (!empty($_POST['episodenum'])) {
+        if (!is_numeric($_POST['episodenum'])) {
+            $error = _('Invalid Episode Number provided');
+            goto error;
+        }
+        $episodeNum = $_POST['episodenum'] + 0;
+        if (!is_integer($episodeNum) || $episodeNum < 1) {
+            $error = _('Invalid Episode Number provided');
+            goto error;
+        }
+    }
+    if (!empty($_POST['seasonnum'])) {
+        if (!is_numeric($_POST['seasonnum'])) {
+            $error = _('Invalid Season Number provided');
+            goto error;
+        }
+        $seasonNum = $_POST['seasonnum'] + 0;
+        if (!is_integer($seasonNum) || $seasonNum < 1) {
+            $error = _('Invalid Season Number provided');
+            goto error;
+        }
+    }
+
     if (strlen($_POST['shortdesc']) > 255) {
         $error = _("Size of the 'Short Description' exceeded");
         goto error;
@@ -140,6 +164,8 @@ if (sizeof($_POST) > 0) {
 <PodcastGenerator>
 	<episode>
 	    <titlePG>' . htmlspecialchars($_POST['title'], ENT_NOQUOTES) . '</titlePG>
+	    <episodeNumPG>' . $_POST['episodenum'] . '</episodeNumPG>
+	    <seasonNumPG>' . $_POST['seasonnum'] . '</seasonNumPG>
 	    <shortdescPG><![CDATA[' . $_POST['shortdesc'] . ']]></shortdescPG>
 	    <longdescPG><![CDATA[' . $_POST['longdesc'] . ']]></longdescPG>
 	    <imgPG></imgPG>
@@ -248,6 +274,14 @@ if (sizeof($_POST) > 0) {
                     <div class="form-group">
                         <?php echo _('Long Description'); ?>:<br>
                         <textarea name="longdesc"></textarea><br>
+                    </div>
+                    <div class="form-group">
+                        <?php echo _('Episode Number'); ?>:<br>
+                        <input type="text" name="episodenum" pattern="[0-9]*" class="form-control"><br>
+                    </div>
+                    <div class="form-group">
+                        <?php echo _('Season Number'); ?>:<br>
+                        <input type="text" name="seasonnum" pattern="[0-9]*" class="form-control"><br>
                     </div>
                     <div class="form-group">
                         <?php echo _('iTunes Keywords'); ?>:<br>
